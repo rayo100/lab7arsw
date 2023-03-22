@@ -52,3 +52,10 @@ table, th, td {
   span{
   font-weight:bold;
   }
+
+  .actionContainer {
+    display: flex;
+    justify-content: space-around;
+    width: 400px;
+    margin-top: 20px;
+  }

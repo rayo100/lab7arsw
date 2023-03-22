@@ -15,6 +15,7 @@ import edu.eci.arsw.blueprints.persistence.BlueprintsPersistence;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,6 +23,8 @@ import org.apache.tomcat.websocket.pojo.PojoPathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.util.JSONPObject;
 
 /**
  *
@@ -70,17 +73,23 @@ public class BlueprintsServices {
     }
 
     public void updateBlueprint(String author, String name, BlueprintBody body) throws BlueprintNotFoundException{
-        if(body.getX1() == null ||
-           body.getX2() == null ||
-           body.getY1() == null ||
-           body.getY2() == null) return;
-
+        List<String> points = body.getPoints();
         Blueprint bpt = bpp.getBlueprint(author, name);
 
         ArrayList<Point> pts = new ArrayList<>();
-        pts.add(new Point(body.getX1(), body.getY1()));
-        pts.add(new Point(body.getX2(), body.getY2()));
+
+        for (String point : points) {
+            String[] sep = point.split(",");
+            Integer x = Integer.valueOf(sep[0]);
+            Integer y = Integer.valueOf(sep[1]);
+            pts.add(new Point(x, y));
+        }
+
         bpt.setPoints(pts);
+    }
+
+    public void deleteBlueprint(String author, String name) throws BlueprintNotFoundException, BlueprintPersistenceException{
+        bpp.deleteBlueprint(author, name);
     }
 
     

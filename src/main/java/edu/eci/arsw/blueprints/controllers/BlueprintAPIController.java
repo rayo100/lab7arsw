@@ -5,7 +5,9 @@
  */
 package edu.eci.arsw.blueprints.controllers;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -77,8 +79,16 @@ public class BlueprintAPIController {
     @RequestMapping(method = RequestMethod.POST, value = "/create")
     public ResponseEntity<?> create(@RequestBody BlueprintBody body) {
         try {
-            Point[] pts = new Point[]{new Point(body.getX1(),body.getY1()),new Point(body.getX2(), body.getY2())};
-            Blueprint bp = new Blueprint(body.getAuthor(), body.getName(), pts);
+            ArrayList<Point> pts = new ArrayList<>();
+            List<String> points = body.getPoints();
+            for (String point : points) {
+                String[] sep = point.split(",");
+                Integer x = Integer.valueOf(sep[0]);
+                Integer y = Integer.valueOf(sep[1]);
+                pts.add(new Point(x, y));
+            }
+            
+            Blueprint bp = new Blueprint(body.getAuthor(), body.getName(), pts.toArray(new Point[]{}));
             services.addNewBlueprint(bp);
             
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -99,6 +109,16 @@ public class BlueprintAPIController {
         }  
     }
 
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{author}/{bpname}")
+    public ResponseEntity<?> delete(@PathVariable String author, @PathVariable String bpname) {
+        try {
+            services.deleteBlueprint(author, bpname);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception ex) {
+            Logger.getLogger(BlueprintAPIController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>("Could not delete blueprint",HttpStatus.BAD_REQUEST);
+        }  
+    }
 
     
 }

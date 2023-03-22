@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" href="css/index.css" />
 </head>
-<body>
+<body onload="app.init()">
     <h1 class="titulo">Blueprints</h1>
     <div class="autor">
         <span>Author</span><input id="author">
@@ -33,8 +33,13 @@
             <h2 id="points">Total Points</h2>
         </div>
         <div class="canva">
-            <h2 id="nameblu"></h2>
+            <div><button id="btnCreate">Create new blueprint</button></div>
+            <h2 id="nameblu">Current blueprint: <span></span></h2>
             <canvas id="myCanvas" width="400" height="400" style="border:1px solid #000000;"></canvas>
+            <div class="actionContainer">
+                <button id="btnSave">Save/update</button>
+                <button id="btnDelete">Delete</button>
+            </div>
         </div>
     </div>
 <!--Importamos los Archivos -->

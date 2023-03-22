@@ -29,6 +29,21 @@ apimock=(function(){
 			callback(
 				mockdata[authname].find(function(e){return e.name===bpname})
 			);
+		},
+
+		saveBlueprint:function(blueprint, creating, callback) {
+
+			if(creating) 
+				mockdata[blueprint.author].push(blueprint);
+			else 
+				mockdata[blueprint.author].find((e) => e.name == blueprint.name).points = blueprint.points;
+
+			callback();
+		},
+
+		removeBlueprint:function(blueprint, callback) {
+			mockdata[blueprint.author] = mockdata[blueprint.author].filter((e) => e.name != blueprint.name);
+			callback();
 		}
 	}	
 
